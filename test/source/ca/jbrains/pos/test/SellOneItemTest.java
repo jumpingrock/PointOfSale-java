@@ -73,10 +73,10 @@ public class SellOneItemTest {
                 }};
 
                 if ("12345".equals(barcode)){
-                    display.setText(priceByBarcode.get("12345"));
+                    display.setText(priceByBarcode.get(barcode));
 
                 }else if ("23456".equals(barcode)){
-                    display.setText(priceByBarcode.get("23456"));
+                    display.setText(priceByBarcode.get(barcode));
 
                 }else {
                     display.setText("Product not found " + barcode);
