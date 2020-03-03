@@ -12,13 +12,21 @@ import static org.junit.Assert.assertNotEquals;
 
 public class SellOneItemTest {
 
-    Map<String, String> priceByBarcode = new HashMap<String, String>() {{
-        put("12345", "7.95");
-        put("23456", "12.50");
-    }};
 
-    final Display display = new Display();
-    final Sale sale = new Sale(display, (HashMap)priceByBarcode);
+
+    private Display display;
+    private Sale sale;
+
+    @Before
+    public void setup() {
+        Map<String, String> priceByBarcode = new HashMap<String, String>() {{
+            put("12345", "7.95");
+            put("23456", "12.50");
+        }};
+
+        display = new Display();
+        sale = new Sale(display, (HashMap)priceByBarcode);
+    }
 
     @Test
     public void productFound() {
