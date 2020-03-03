@@ -3,27 +3,42 @@ package ca.jbrains.pos.test;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class SellOneItemTest {
+    final Display display = new Display();
+    final Sale sale = new Sale(display);
 
     @Test
     public void productFound() {
-        final Display display = new Display();
-        final Sale sale = new Sale(display);
 
         sale.onBarCodeReader("12345");
         assertEquals("7.95", display.getText());
     }
 
     @Test
-    @Ignore("refactor to get barcode reader to tell getText what to display")
     public void anotherProductFound() {
-        final Display display = new Display();
-        final Sale sale = new Sale(display);
 
-        sale.onBarCodeReader("11111");
-        assertEquals("8.00", display.getText());
+        sale.onBarCodeReader("23456");
+        assertEquals("12.50", display.getText());
+    }
+
+    @Test
+    public void productNotFounnd() {
+
+        sale.onBarCodeReader("99999");
+        assertEquals("Product not found 99999", display.getText());
+    }
+
+    @Test
+    public void emptyBarcode() {
+
+        sale.onBarCodeReader("");
+        assertEquals("Product not found: Empty barcode", display.getText());
     }
 
     public static class Display {
@@ -47,7 +62,29 @@ public class SellOneItemTest {
         }
 
         public void onBarCodeReader (String barcode) {
-            display.setText("7.95");
+            if ("".equals(barcode)){
+                display.setText("Product not found: Empty barcode");
+
+            }else {
+
+                final Map<String, String> priceByBarcode = new HashMap<String, String>() {{
+                    put("12345", "7.95");
+                    put("23456", "12.50");
+                }};
+
+                if ("12345".equals(barcode)){
+                    display.setText(priceByBarcode.get("12345"));
+
+                }else if ("23456".equals(barcode)){
+                    display.setText(priceByBarcode.get("23456"));
+
+                }else {
+                    display.setText("Product not found " + barcode);
+
+                }
+
+            }
+
             
         }
     }
