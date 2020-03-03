@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class SellOneItemTest {
+    
     final Display display = new Display();
     final Sale sale = new Sale(display);
 
@@ -62,20 +64,18 @@ public class SellOneItemTest {
         }
 
         public void onBarCodeReader (String barcode) {
+
+            final Map<String, String> priceByBarcode = new HashMap<String, String>() {{
+                put("12345", "7.95");
+                put("23456", "12.50");
+            }};
+
             if ("".equals(barcode)){
                 display.setText("Product not found: Empty barcode");
 
             }else {
 
-                final Map<String, String> priceByBarcode = new HashMap<String, String>() {{
-                    put("12345", "7.95");
-                    put("23456", "12.50");
-                }};
-
-                if ("12345".equals(barcode)){
-                    display.setText(priceByBarcode.get(barcode));
-
-                }else if ("23456".equals(barcode)){
+                if (priceByBarcode.containsKey(barcode)){
                     display.setText(priceByBarcode.get(barcode));
 
                 }else {
